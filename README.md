@@ -98,6 +98,9 @@ number between 0 and 100 that defines the degree of mismatch to consider two ima
 * **ignoreComparison** `String`  ( default: nothing ) <br>
 pass in a string with value of `nothing` , `colors` or `antialiasing` to adjust the comparison method.
 
+* **largeImageThreshold** `Number`  ( default: 1200 ) <br>
+number to control when to skip pixels while ignoreComparison is active (6px grid). Set to 0 to turn off grid completely. 
+
 For an example of generating screenshot filesnames dependent on the current test name, have a look at the sample code of [Configuration](#configuration).
 
 #### VisualRegressionCompare.SaveScreenshot
@@ -207,6 +210,9 @@ available:
 * **ignoreComparison** `String` <br>
     Overrides the global *ignoreComparison* value for this command. Pass in a string with value of `nothing` , `colors` or `antialiasing` to adjust the comparison method.
 
+* **largeImageThreshold** `String` <br>
+    Overrides the global *largeImageThreshold* value for this command.
+    
 * **viewportChangePause**  `Number` <br>
     Overrides the global *viewportChangePause* value for this command. Wait x milliseconds after viewport change.
 

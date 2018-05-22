@@ -15,6 +15,7 @@ export default class LocalCompare extends BaseCompare {
     this.getDiffFile = options.diffName;
     this.misMatchTolerance = _.get(options, 'misMatchTolerance', 0.01);
     this.ignoreComparison = _.get(options, 'ignoreComparison', 'nothing');
+    this.largeImageThreshold = _.get(options, 'largeImageThreshold', 1200);
   }
 
   async processScreenshot(context, base64Screenshot) {
@@ -29,8 +30,9 @@ export default class LocalCompare extends BaseCompare {
       log('reference exists, compare it with the taken now');
       const captured = new Buffer(base64Screenshot, 'base64');
       const ignoreComparison = _.get(context, 'options.ignoreComparison', this.ignoreComparison);
+      const largeImageThreshold = _.get(context, 'options.largeImageThreshold', this.largeImageThreshold);
 
-      const compareData = await this.compareImages(referencePath, captured, ignoreComparison);
+      const compareData = await this.compareImages(referencePath, captured, ignoreComparison, largeImageThreshold);
 
       const { isSameDimensions } = compareData;
       const misMatchPercentage = Number(compareData.misMatchPercentage);
@@ -64,8 +66,10 @@ export default class LocalCompare extends BaseCompare {
    * @param  {Buffer|string} screenshot path to file or buffer to compare with reference
    * @return {{misMatchPercentage: Number, isSameDimensions:Boolean, getImageDataUrl: function}}
    */
-  async compareImages(reference, screenshot, ignore = '') {
+  async compareImages(reference, screenshot, ignore = '', largeImageThreshold = null) {
     return await new Promise((resolve) => {
+      resemble.outputSettings({ largeImageThreshold: largeImageThreshold });
+
       const image = resemble(reference).compareTo(screenshot);
 
       switch(ignore) {
